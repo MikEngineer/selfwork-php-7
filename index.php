@@ -1,76 +1,68 @@
 <?php
 
-// Ripetere esercizio password implementando metodo che faccia reinserire psw quando anche una sola regola non viene rispettata, crearne uno che interrompa in caso di psw accettata. Fare visualizzare quale regola non viene rispettata
-
-// Regole:
-// 1. Lunga almeno 8
-// 2. Almeno 1 numero
-// 3. Almeno 1 maiuscolo
-// 4. Almeno 1 speciale tra !, @, # e $
-
-//Funzioni
-
 $password = readline("Inserire password: ");
 
 echo "Password inserita: " . $password . "\n";
 
+function checkLength($psw){
+    if(strlen($psw) >= 8){
+        return true;
+    }else{
+        echo "La password inserita è lunga " . strlen($psw) . " caratteri, ma deve contenerne almeno 8!\n";
+        return false;
+    }
+};
+
+function checkNumber($psw){
+    for($i = 0; $i < strlen($psw); $i++){
+        if(is_numeric($psw[$i])){
+            echo "La tua password contiene almeno un numero, perfetto!\n";
+            return true;
+        }
+    }
+};
+
+function checkUpper($psw){
+    for($i = 0; $i < strlen($psw); $i++){
+        if(ctype_upper($psw[$i])){
+            return true;
+        }
+    }
+    echo "La tua password deve contenere ALMENO una lettera maiuscola, riprova!\n";
+    return false;
+};
+
 const SPECIAL_CHARS = ["!", "@", "#", "$"];
 
-function checkLength($psw) {
-    if (strlen($psw) >= 8) {
-        return true;
-    } else {
-        return "essere lunga almeno 8 caratteri.";
-    }
-}
-
-function checkNumber($psw) {
-    for ($i = 0; $i < strlen($psw); $i++) {
-        if (is_numeric($psw[$i])) {
+function checkSpecial($psw){
+    
+    for($i = 0; $i < strlen($psw); $i++){
+        if(in_array($psw[$i], SPECIAL_CHARS)){
             return true;
         }
     }
-    return "contenere almeno un numero.";
-}
+    echo "La tua password deve contenere ALMENO un carattere speciale, riprova!\n";
+    return false;
+};
 
-function checkUpper($psw) {
-    for ($i = 0; $i < strlen($psw); $i++) {
-        if (ctype_upper($psw[$i])) {
-            return true;
-        }
+function checkPassword($psw){
+    $first_rule = checkLength($psw);
+    $second_rule = checkNumber($psw);
+    $third_rule = checkUpper($psw);
+    $fourth_rule = checkSpecial($psw);
+
+    if($first_rule && $second_rule && $third_rule && $fourth_rule){
+        echo "Password accettata\n";
     }
-    return "contenere almeno una lettera maiuscola.";
-}
-
-function checkSpecial($psw) {
-    for ($i = 0; $i < strlen($psw); $i++) {
-        if (in_array($psw[$i], SPECIAL_CHARS)) {
-            return true;
-        }
-    }
-    return "contenere almeno un carattere speciale.";
-}
-
-function checkPassword($psw) {
-    $rules = [
-        "Lunghezza" => checkLength($psw),
-        "Numero" => checkNumber($psw),
-        "Maiuscola" => checkUpper($psw),
-        "Carattere Speciale" => checkSpecial($psw)
-    ];
-
-    foreach ($rules as $rule => $result) {
-        if ($result !== true) {
-            echo "La password deve $result\n";
-            checkPassword($password);
-            // return;
-        }
-    }
-
-    echo "Password accettata\n";
-}
+    return $first_rule && $second_rule && $third_rule && $fourth_rule;
+    echo("La password non rispetta la regola ...\n");
+};
 
 checkPassword($password);
+
+do{
+    $password = readline("Inserire password: ");
+}while(!checkPassword($password));
 
 
 ?>
