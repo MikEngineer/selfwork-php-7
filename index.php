@@ -56,7 +56,6 @@ function checkPassword($psw){
         echo "Password accettata\n";
     }
     return $first_rule && $second_rule && $third_rule && $fourth_rule;
-    echo("La password non rispetta la regola ...\n");
 };
 
 checkPassword($password);
