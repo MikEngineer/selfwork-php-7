@@ -16,10 +16,11 @@ function checkLength($psw){
 function checkNumber($psw){
     for($i = 0; $i < strlen($psw); $i++){
         if(is_numeric($psw[$i])){
-            echo "La tua password contiene almeno un numero, perfetto!\n";
             return true;
         }
     }
+    echo "La tua password deve contenere ALMENO un numero, riprova!\n";
+    return false;
 };
 
 function checkUpper($psw){
